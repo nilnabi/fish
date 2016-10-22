@@ -1,0 +1,20 @@
+machine:
+  timezone: Asia/Tokyo
+  node:
+    version: 6.7.0
+
+dependencies:
+  pre:
+    - npm install -g firebase-tools
+  override:
+    - npm install
+
+test:
+  override:
+    - npm run build:prod
+
+deployment:
+  production:
+    branch: master
+    commands:
+      - firebase deploy --token=$FIREBASE_TOKEN --non-interactive
