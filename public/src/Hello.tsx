@@ -10,8 +10,8 @@ export interface State {
 }
 
 export class Time {
-    value: string;
-    test: string;
+    date: string;
+    add: number;
 }
 
 export default class MyComponent extends React.Component<Props, State> {
@@ -40,9 +40,9 @@ export default class MyComponent extends React.Component<Props, State> {
     }
 
     onClick(e:any) {
-        const time = new Time()
-        time.value = Date()
-        time.test = "okok"
+        const time = new Time();
+        time.date = Date();
+        time.add = this.state.time.add+1;
         firebase.database().ref('times/').set({ time });
     }
 
@@ -50,9 +50,9 @@ export default class MyComponent extends React.Component<Props, State> {
         return (
             <div>
                 <div>{this.props.content}</div>
-                <div>{this.state.time.test}</div>
-                <div>{this.state.time.value}</div>
-                <div><button onClick={this.onClick}>Click</button></div>
+                <div>{this.state.time.date}</div>
+                <div>{this.state.time.add}</div>
+                <div><button onClick={this.onClick.bind(this)}>Click</button></div>
             </div>
         )
         // return <div>{this.props.content}</div>
