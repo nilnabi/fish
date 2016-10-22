@@ -10,8 +10,10 @@ export interface State {
 }
 
 export class Time {
-    date: string;
-    add: number;
+    constructor(public date: string, public add: number) {
+        this.date = date
+        this.add = add
+    }
 }
 
 export default class MyComponent extends React.Component<Props, State> {
@@ -20,7 +22,7 @@ export default class MyComponent extends React.Component<Props, State> {
         super();
 
         this.state = {
-            time: new Time()
+            time: new Time("read", 0)
         }
     }
 
@@ -32,17 +34,18 @@ export default class MyComponent extends React.Component<Props, State> {
             storageBucket: ''
         });
         firebase.database().ref('times/time').on('value', (snapshot) => {
-            this.setState({
-                time: snapshot.val()
-            })
+            const value = snapshot.val()
+            if (value != null) {
+                this.setState({
+                    time: new Time(snapshot.val().date, snapshot.val().add)
+                })
+            }
             console.log("KKKK", snapshot.val());
         });
     }
 
     onClick(e:any) {
-        const time = new Time();
-        time.date = Date();
-        time.add = this.state.time.add+1;
+        const time = new Time(Date(), this.state.time.add+1);
         firebase.database().ref('times/').set({ time });
     }
 
@@ -55,6 +58,5 @@ export default class MyComponent extends React.Component<Props, State> {
                 <div><button onClick={this.onClick.bind(this)}>Click</button></div>
             </div>
         )
-        // return <div>{this.props.content}</div>
     }
 }
